@@ -10,5 +10,5 @@ func Register(svr *echo.Echo, ctrl *controller.Controller) {
 	root.GET("/health", ctrl.HealthController.HealthCheck)
 
 	file := root.Group("/file")
-	file.GET("/test", ctrl.FileController.HandleUploadFile)
+	file.POST("/image", ctrl.FileController.HandleUploadFile)
 }

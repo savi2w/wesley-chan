@@ -4,6 +4,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+type AWSConfig struct {
+	FileBucketName string
+	Region         string
+}
+
 type InternalConfig struct {
 	Port        int
 	ServiceName string
@@ -18,6 +23,7 @@ type MySQLConfig struct {
 }
 
 type Config struct {
+	AWSConfig      *AWSConfig
 	InternalConfig *InternalConfig
 	MySQLConfig    *MySQLConfig
 }
@@ -26,6 +32,10 @@ func Get() *Config {
 	viper.AutomaticEnv()
 
 	return &Config{
+		AWSConfig: &AWSConfig{
+			FileBucketName: viper.GetString("AWS_FILE_BUCKET_NAME"),
+			Region:         viper.GetString("AWS_REGION"),
+		},
 		InternalConfig: &InternalConfig{
 			Port:        viper.GetInt("SERVER_PORT"),
 			ServiceName: viper.GetString("SERVICE_NAME"),

@@ -11,18 +11,13 @@ type File struct {
 	cli *sqlx.DB
 }
 
-func (f *File) InsertFile(ctx context.Context, file *model.File) (fileID int64, err error) {
-	query := ``
+func (f *File) InsertFile(ctx context.Context, file *model.File) error {
+	query := "INSERT INTO db_wesley_chan.tb_file (file_key) VALUES (?);"
 
-	result, err := f.cli.NamedExecContext(ctx, query, file)
+	_, err := f.cli.ExecContext(ctx, query, file.Key)
 	if err != nil {
-		return 0, err
+		return err
 	}
 
-	fileID, err = result.LastInsertId()
-	if err != nil {
-		return 0, err
-	}
-
-	return fileID, nil
+	return nil
 }
