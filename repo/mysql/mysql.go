@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"fmt"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -27,6 +28,10 @@ func New(cfg *config.Config) (*Repo, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	cli.DB.SetConnMaxLifetime(time.Minute * 5)
+	cli.DB.SetMaxIdleConns(5)
+	cli.DB.SetMaxOpenConns(100)
 
 	// Ping the database to ensure the connection is alive
 	if err := cli.Ping(); err != nil {
