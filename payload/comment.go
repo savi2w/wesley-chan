@@ -1,4 +1,4 @@
-package valid
+package payload
 
 import (
 	"encoding/json"
@@ -13,11 +13,11 @@ func GetComment(rc io.ReadCloser) (r *req.Comment, err error) {
 
 	body, err := io.ReadAll(rc)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("invalid read closer")
 	}
 
 	if err := json.Unmarshal(body, r); err != nil {
-		return nil, err
+		return nil, errors.New("invalid json payload")
 	}
 
 	if len(r.ThreadID) != 36 {

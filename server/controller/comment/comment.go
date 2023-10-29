@@ -6,8 +6,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog"
 	"github.com/savi2w/wesley-chan/errors"
+	"github.com/savi2w/wesley-chan/payload"
 	"github.com/savi2w/wesley-chan/service"
-	"github.com/savi2w/wesley-chan/valid"
 )
 
 type Controller struct {
@@ -23,7 +23,7 @@ func New(logger *zerolog.Logger, svc *service.Service) *Controller {
 }
 
 func (ctrl *Controller) HandleNewComment(ctx echo.Context) error {
-	req, err := valid.GetComment(ctx.Request().Body)
+	req, err := payload.GetComment(ctx.Request().Body)
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, errors.Wrap(err))
 	}
