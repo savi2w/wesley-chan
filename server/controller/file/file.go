@@ -34,7 +34,7 @@ func (ctrl *Controller) HandleUpload(ctx echo.Context) error {
 
 	resp, err := ctrl.svc.File.UploadFile(ctx.Request().Context(), &req)
 	if err != nil {
-		ctrl.logger.Err(err)
+		ctrl.logger.Err(err).Msg(err.Error())
 
 		// It's important to not leak any information about the error to the client.
 		return ctx.JSON(http.StatusInternalServerError, nil)

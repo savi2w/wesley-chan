@@ -13,5 +13,5 @@ func New() *Controller {
 }
 
 func (ctrl *Controller) HealthCheck(ctx echo.Context) error {
-	return ctx.String(http.StatusOK, "OK")
+	return ctx.JSON(http.StatusOK, nil)
 }

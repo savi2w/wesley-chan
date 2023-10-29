@@ -7,7 +7,6 @@ import (
 	"github.com/savi2w/wesley-chan/config"
 	"github.com/savi2w/wesley-chan/model"
 	"github.com/savi2w/wesley-chan/presenter/req"
-	"github.com/savi2w/wesley-chan/presenter/res"
 	"github.com/savi2w/wesley-chan/repo"
 )
 
@@ -25,20 +24,12 @@ func NewCommentService(cfg *config.Config, logger *zerolog.Logger, repo *repo.Re
 	}
 }
 
-func (s *CommentService) NewComment(ctx context.Context, r *req.Comment) (resp *res.Comment, err error) {
+func (s *CommentService) NewComment(ctx context.Context, r *req.Comment) error {
 	comment := &model.Comment{
 		ThreadID:    r.ThreadID,
 		FileID:      r.FileID,
 		TextContent: r.TextContent,
 	}
 
-	if err := s.RepoManager.MySQL.Comment.InsertComment(ctx, comment); err != nil {
-		return nil, err
-	}
-
-	return &res.Comment{
-		ThreadID:    r.ThreadID,
-		FileID:      r.FileID,
-		TextContent: r.TextContent,
-	}, nil
+	return s.RepoManager.MySQL.Comment.InsertComment(ctx, comment)
 }

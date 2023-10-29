@@ -28,12 +28,22 @@ func (ctrl *Controller) HandleNewBoard(ctx echo.Context) error {
 		return ctx.JSON(http.StatusBadRequest, errors.Wrap(err))
 	}
 
-	resp, err := ctrl.svc.Board.NewBoard(ctx.Request().Context(), req)
-	if err != nil {
-		ctrl.logger.Err(err)
+	if err := ctrl.svc.Board.NewBoard(ctx.Request().Context(), req); err != nil {
+		ctrl.logger.Err(err).Msg(err.Error())
 
 		return ctx.JSON(http.StatusInternalServerError, nil)
 	}
 
-	return ctx.JSON(http.StatusCreated, resp)
+	return ctx.JSON(http.StatusCreated, nil)
+}
+
+func (ctrl *Controller) HandleGetAll(ctx echo.Context) error {
+	resp, err := ctrl.svc.Board.GetAll(ctx.Request().Context())
+	if err != nil {
+		ctrl.logger.Err(err).Msg(err.Error())
+
+		return ctx.JSON(http.StatusInternalServerError, nil)
+	}
+
+	return ctx.JSON(http.StatusOK, resp)
 }

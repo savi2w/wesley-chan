@@ -11,8 +11,9 @@ func Register(cfg *config.Config, svr *echo.Echo, ctrl *controller.Controller) {
 	root := svr.Group("wc")
 	root.GET("/health", ctrl.HealthController.HealthCheck)
 
-	board := root.Group("/board", middleware.RequireAdminKey(cfg))
-	board.POST("", ctrl.BoardController.HandleNewBoard)
+	board := root.Group("/board")
+	board.POST("", ctrl.BoardController.HandleNewBoard, middleware.RequireAdminKey(cfg))
+	board.GET("", ctrl.BoardController.HandleGetAll)
 
 	comment := root.Group("/comment")
 	comment.POST("", ctrl.CommentController.HandleNewComment)

@@ -20,7 +20,7 @@ type Repo struct {
 
 func New(cfg *config.Config) (*Repo, error) {
 	target := fmt.Sprintf(
-		"%s:%s@tcp(%s:%d)/%s",
+		"%s:%s@tcp(%s:%d)/%s?parseTime=true",
 		cfg.MySQLConfig.Username,
 		cfg.MySQLConfig.Password,
 		cfg.MySQLConfig.Host,

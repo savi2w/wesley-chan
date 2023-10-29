@@ -20,7 +20,6 @@ func SetMiddlewares(e *echo.Echo, cfg *config.Config) {
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Pre(middleware.Secure())
 
-	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
 	e.Use(middleware.ContextTimeout(consts.Timeout))

@@ -25,20 +25,32 @@ func NewBoardService(cfg *config.Config, logger *zerolog.Logger, repo *repo.Repo
 	}
 }
 
-func (s *BoardService) NewBoard(ctx context.Context, r *req.Board) (resp *res.Board, err error) {
+func (s *BoardService) NewBoard(ctx context.Context, r *req.Board) error {
 	board := &model.Board{
 		Name:        r.Name,
 		Slug:        r.Slug,
 		Description: r.Description,
 	}
 
-	if err := s.RepoManager.MySQL.Board.InsertBoard(ctx, board); err != nil {
+	return s.RepoManager.MySQL.Board.InsertBoard(ctx, board)
+}
+
+func (s *BoardService) GetAll(ctx context.Context) (resp []res.Board, err error) {
+	boards, err := s.RepoManager.MySQL.Board.SelectAll(ctx)
+	if err != nil {
 		return nil, err
 	}
 
-	return &res.Board{
-		Name:        r.Name,
-		Slug:        r.Slug,
-		Description: r.Description,
-	}, nil
+	for _, board := range boards {
+		resp = append(resp, res.Board{
+			Name:        board.Name,
+			Slug:        board.Slug,
+			Description: board.Description,
+			CreatedAt:   board.CreatedAt,
+			UpdatedAt:   board.UpdatedAt,
+			DeletedAt:   board.DeletedAt,
+		})
+	}
+
+	return resp, nil
 }
