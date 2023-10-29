@@ -10,8 +10,9 @@ type AWSConfig struct {
 }
 
 type InternalConfig struct {
-	Port        int
-	ServiceName string
+	RunningLocal bool
+	ServerPort   int
+	ServiceName  string
 }
 
 type MySQLConfig struct {
@@ -37,8 +38,9 @@ func Get() *Config {
 			Region:         viper.GetString("AWS_REGION"),
 		},
 		InternalConfig: &InternalConfig{
-			Port:        viper.GetInt("SERVER_PORT"),
-			ServiceName: viper.GetString("SERVICE_NAME"),
+			RunningLocal: viper.GetBool("RUNNING_LOCAL"),
+			ServerPort:   viper.GetInt("SERVER_PORT"),
+			ServiceName:  viper.GetString("SERVICE_NAME"),
 		},
 		MySQLConfig: &MySQLConfig{
 			Host:     viper.GetString("MYSQL_HOST"),

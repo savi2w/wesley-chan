@@ -9,6 +9,9 @@ func Register(svr *echo.Echo, ctrl *controller.Controller) {
 	root := svr.Group("wc")
 	root.GET("/health", ctrl.HealthController.HealthCheck)
 
+	board := root.Group("/board")
+	board.POST("", ctrl.BoardController.HandleNewBoard)
+
 	comment := root.Group("/comment")
 	comment.POST("", ctrl.CommentController.HandleNewComment)
 

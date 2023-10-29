@@ -7,6 +7,7 @@ import (
 )
 
 type Service struct {
+	Board   *BoardService
 	Comment *CommentService
 	File    *FileService
 	Thread  *ThreadService
@@ -14,6 +15,7 @@ type Service struct {
 
 func New(cfg *config.Config, logger *zerolog.Logger, repo *repo.RepoManager) *Service {
 	return &Service{
+		Board:   NewBoardService(cfg, logger, repo),
 		Comment: NewCommentService(cfg, logger, repo),
 		File:    NewFileService(cfg, logger, repo),
 		Thread:  NewThreadService(cfg, logger, repo),

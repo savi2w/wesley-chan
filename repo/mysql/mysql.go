@@ -10,6 +10,7 @@ import (
 )
 
 type Repo struct {
+	Board   *Board
 	Comment *Comment
 	File    *File
 	Thread  *Thread
@@ -42,6 +43,7 @@ func New(cfg *config.Config) (*Repo, error) {
 	}
 
 	return &Repo{
+		Board:   &Board{cli: cli},
 		Comment: &Comment{cli: cli},
 		File:    &File{cli: cli},
 		Thread:  &Thread{cli: cli},

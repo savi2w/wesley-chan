@@ -25,20 +25,20 @@ func NewCommentService(cfg *config.Config, logger *zerolog.Logger, repo *repo.Re
 	}
 }
 
-func (sv *CommentService) NewComment(ctx context.Context, req *req.Comment) (resp *res.Comment, err error) {
+func (s *CommentService) NewComment(ctx context.Context, r *req.Comment) (resp *res.Comment, err error) {
 	comment := &model.Comment{
-		ThreadID:    req.ThreadID,
-		FileID:      req.FileID,
-		TextContent: req.TextContent,
+		ThreadID:    r.ThreadID,
+		FileID:      r.FileID,
+		TextContent: r.TextContent,
 	}
 
-	if err := sv.RepoManager.MySQL.Comment.InsertComment(ctx, comment); err != nil {
+	if err := s.RepoManager.MySQL.Comment.InsertComment(ctx, comment); err != nil {
 		return nil, err
 	}
 
 	return &res.Comment{
-		ThreadID:    req.ThreadID,
-		FileID:      *req.FileID,
-		TextContent: req.TextContent,
+		ThreadID:    r.ThreadID,
+		FileID:      r.FileID,
+		TextContent: r.TextContent,
 	}, nil
 }

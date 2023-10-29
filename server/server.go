@@ -8,6 +8,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/savi2w/wesley-chan/config"
 	"github.com/savi2w/wesley-chan/server/controller"
+	"github.com/savi2w/wesley-chan/server/middleware"
 	"github.com/savi2w/wesley-chan/server/router"
 )
 
@@ -42,13 +43,12 @@ func (s *Server) Start() error {
 	s.svr.HideBanner = true
 	s.svr.HidePort = true
 
-	// Set middlewares
-	// Set routers
+	middleware.SetMiddlewares(s.svr, s.cfg)
 	router.Register(s.svr, s.ctrl)
 
-	s.logger.Info().Msgf("Starting server on port :%d", s.cfg.InternalConfig.Port)
+	s.logger.Info().Msg("starting server")
 
-	if err := s.svr.Start(fmt.Sprintf(":%d", s.cfg.InternalConfig.Port)); err != nil {
+	if err := s.svr.Start(fmt.Sprintf(":%d", s.cfg.InternalConfig.ServerPort)); err != nil {
 		return err
 	}
 

@@ -1,4 +1,4 @@
-package thread
+package board
 
 import (
 	"net/http"
@@ -22,13 +22,13 @@ func New(logger *zerolog.Logger, svc *service.Service) *Controller {
 	}
 }
 
-func (ctrl *Controller) HandleNewThread(ctx echo.Context) error {
-	req, err := payload.GetThread(ctx.Request().Body)
+func (ctrl *Controller) HandleNewBoard(ctx echo.Context) error {
+	req, err := payload.GetBoard(ctx.Request().Body)
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, errors.Wrap(err))
 	}
 
-	resp, err := ctrl.svc.Thread.NewThread(ctx.Request().Context(), req)
+	resp, err := ctrl.svc.Board.NewBoard(ctx.Request().Context(), req)
 	if err != nil {
 		ctrl.logger.Err(err)
 
