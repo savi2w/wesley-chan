@@ -19,6 +19,6 @@ func GetFileExt(fileName string) string {
 	return ext
 }
 
-func GetFileURL(cfg *config.Config, fileKey string) string {
-	return "https://" + cfg.AWSConfig.FileBucketName + ".s3.amazonaws.com/" + url.PathEscape(fileKey)
+func GetFileURL(cfg *config.Config, fileID string) string {
+	return "https://" + cfg.AWSConfig.FileBucketName + ".s3.amazonaws.com/" + url.PathEscape(fileID)
 }
