@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/labstack/echo/v4"
+	"github.com/rs/zerolog"
 	"github.com/savi2w/wesley-chan/config"
 	"github.com/savi2w/wesley-chan/server/controller"
 	"github.com/savi2w/wesley-chan/server/router"
@@ -16,21 +17,21 @@ var (
 )
 
 type Server struct {
-	cfg  *config.Config
-	svr  *echo.Echo
-	log  echo.Logger
-	ctrl *controller.Controller
+	cfg    *config.Config
+	svr    *echo.Echo
+	logger *zerolog.Logger
+	ctrl   *controller.Controller
 }
 
-func New(cfg *config.Config) *Server {
+func New(cfg *config.Config, logger *zerolog.Logger, ctrl *controller.Controller) *Server {
 	once.Do(func() {
 		svr := echo.New()
 
 		instance = &Server{
-			cfg:  cfg,
-			svr:  svr,
-			log:  svr.Logger,
-			ctrl: controller.New(),
+			cfg:    cfg,
+			svr:    svr,
+			logger: logger,
+			ctrl:   ctrl,
 		}
 	})
 

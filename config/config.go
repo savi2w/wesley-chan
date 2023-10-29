@@ -5,7 +5,8 @@ import (
 )
 
 type InternalConfig struct {
-	Port int
+	Port        int
+	ServiceName string
 }
 
 type MySQLConfig struct {
@@ -26,7 +27,8 @@ func Get() *Config {
 
 	return &Config{
 		InternalConfig: &InternalConfig{
-			Port: viper.GetInt("SERVER_PORT"),
+			Port:        viper.GetInt("SERVER_PORT"),
+			ServiceName: viper.GetString("SERVICE_NAME"),
 		},
 		MySQLConfig: &MySQLConfig{
 			Host:     viper.GetString("MYSQL_HOST"),

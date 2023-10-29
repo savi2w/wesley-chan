@@ -8,4 +8,7 @@ import (
 func Register(svr *echo.Echo, ctrl *controller.Controller) {
 	root := svr.Group("")
 	root.GET("/health", ctrl.HealthController.HealthCheck)
+
+	file := root.Group("/file")
+	file.GET("/test", ctrl.FileController.HandleUploadFile)
 }

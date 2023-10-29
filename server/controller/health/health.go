@@ -6,12 +6,12 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type HealthController struct{}
+type Controller struct{}
 
-func New() *HealthController {
-	return &HealthController{}
+func New() *Controller {
+	return &Controller{}
 }
 
-func (ctrl *HealthController) HealthCheck(ctx echo.Context) error {
+func (ctrl *Controller) HealthCheck(ctx echo.Context) error {
 	return ctx.String(http.StatusOK, "OK")
 }

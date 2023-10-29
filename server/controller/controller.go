@@ -1,14 +1,19 @@
 package controller
 
-import "github.com/savi2w/wesley-chan/server/controller/health"
+import (
+	"github.com/savi2w/wesley-chan/server/controller/file"
+	"github.com/savi2w/wesley-chan/server/controller/health"
+	"github.com/savi2w/wesley-chan/service"
+)
 
 type Controller struct {
-	// Add controllers here
-	HealthController *health.HealthController
+	FileController   *file.Controller
+	HealthController *health.Controller
 }
 
-func New() *Controller {
+func New(svc *service.Service) *Controller {
 	return &Controller{
+		FileController:   file.New(svc),
 		HealthController: health.New(),
 	}
 }
