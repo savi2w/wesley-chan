@@ -10,8 +10,11 @@ import (
 )
 
 type Repo struct {
-	File *File
-	cli  *sqlx.DB
+	Comment *Comment
+	File    *File
+	Thread  *Thread
+
+	cli *sqlx.DB
 }
 
 func New(cfg *config.Config) (*Repo, error) {
@@ -39,7 +42,10 @@ func New(cfg *config.Config) (*Repo, error) {
 	}
 
 	return &Repo{
-		File: &File{cli: cli},
-		cli:  cli,
+		Comment: &Comment{cli: cli},
+		File:    &File{cli: cli},
+		Thread:  &Thread{cli: cli},
+
+		cli: cli,
 	}, nil
 }

@@ -6,6 +6,7 @@ type Thread struct {
 	ID          string     `db:"thread_id"`
 	BoardID     string     `db:"board_id"`
 	FileID      *string    `db:"file_id"`
+	Subject     string     `db:"subject"`
 	TextContent string     `db:"text_content"`
 	CreatedAt   time.Time  `db:"created_at"`
 	UpdatedAt   time.Time  `db:"updated_at"`

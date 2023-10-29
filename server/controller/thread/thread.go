@@ -1,4 +1,4 @@
-package file
+package thread
 
 import (
 	"net/http"
@@ -6,8 +6,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog"
 	"github.com/savi2w/wesley-chan/errors"
-	"github.com/savi2w/wesley-chan/presenter/req"
 	"github.com/savi2w/wesley-chan/service"
+	"github.com/savi2w/wesley-chan/valid"
 )
 
 type Controller struct {
@@ -22,21 +22,16 @@ func New(logger *zerolog.Logger, svc *service.Service) *Controller {
 	}
 }
 
-func (ctrl *Controller) HandleUpload(ctx echo.Context) error {
-	header, err := ctx.FormFile("target")
+func (ctrl *Controller) HandleNewThread(ctx echo.Context) error {
+	thr, err := valid.GetThread(ctx.Request().Body)
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, errors.Wrap(err))
 	}
 
-	req := req.File{
-		Header: header,
-	}
-
-	resp, err := ctrl.svc.File.UploadFile(ctx.Request().Context(), &req)
+	resp, err := ctrl.svc.Thread.NewThread(ctx.Request().Context(), thr)
 	if err != nil {
 		ctrl.logger.Err(err)
 
-		// It's important to not leak any information about the error to the client.
 		return ctx.JSON(http.StatusInternalServerError, nil)
 	}
 

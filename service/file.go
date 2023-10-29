@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"mime/multipart"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -11,7 +11,10 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/savi2w/wesley-chan/config"
 	"github.com/savi2w/wesley-chan/model"
+	"github.com/savi2w/wesley-chan/presenter/req"
+	"github.com/savi2w/wesley-chan/presenter/res"
 	"github.com/savi2w/wesley-chan/repo"
+	"github.com/savi2w/wesley-chan/util/stringutil"
 )
 
 type FileService struct {
@@ -28,36 +31,27 @@ func NewFileService(cfg *config.Config, logger *zerolog.Logger, repo *repo.RepoM
 	}
 }
 
-func (s *FileService) UploadImage(ctx context.Context, file *multipart.FileHeader) error {
-	src, err := file.Open()
+func (s *FileService) UploadFile(ctx context.Context, r *req.File) (resp *res.File, err error) {
+	src, err := r.Header.Open()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	defer src.Close()
 
-	// isImage, err := imageutil.IsImage(src)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// if !isImage {
-	// 	return errors.New("unknown file type")
-	// }
-
 	v4, err := uuid.NewRandom()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	fileKey := v4.String() + ".jpg"
+	fileID := strings.Join([]string{v4.String(), stringutil.GetFileExt(r.Header.Filename)}, ".")
 
 	session, err := session.NewSession(&aws.Config{
 		Region: aws.String(s.Config.AWSConfig.Region),
 	})
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	uploader := s3.New(session)
@@ -65,20 +59,20 @@ func (s *FileService) UploadImage(ctx context.Context, file *multipart.FileHeade
 	_, err = uploader.PutObject(&s3.PutObjectInput{
 		Body:   src,
 		Bucket: aws.String(s.Config.AWSConfig.FileBucketName),
-		Key:    aws.String(fileKey),
+		Key:    aws.String(fileID),
 	})
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	err = s.RepoManager.MySQL.File.InsertFile(ctx, &model.File{
-		Key: fileKey,
+		ID: fileID,
 	})
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &res.File{ID: fileID}, nil
 }

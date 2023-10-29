@@ -23,7 +23,7 @@ func main() {
 	}
 
 	svc := service.New(cfg, logger, repo)
-	ctrl := controller.New(svc)
+	ctrl := controller.New(svc, logger)
 
 	if err := server.New(cfg, logger, ctrl).Start(); err != nil {
 		end(err, "failed to start server")

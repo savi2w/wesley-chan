@@ -6,9 +6,15 @@ import (
 )
 
 func Register(svr *echo.Echo, ctrl *controller.Controller) {
-	root := svr.Group("")
+	root := svr.Group("wc")
 	root.GET("/health", ctrl.HealthController.HealthCheck)
 
+	comment := root.Group("/comment")
+	comment.POST("", ctrl.CommentController.HandleNewComment)
+
 	file := root.Group("/file")
-	file.POST("/image", ctrl.FileController.HandleUploadFile)
+	file.POST("", ctrl.FileController.HandleUpload)
+
+	thread := root.Group("/thread")
+	thread.POST("", ctrl.ThreadController.HandleNewThread)
 }

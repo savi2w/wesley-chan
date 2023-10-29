@@ -12,9 +12,9 @@ type File struct {
 }
 
 func (f *File) InsertFile(ctx context.Context, file *model.File) error {
-	query := "INSERT INTO db_wesley_chan.tb_file (file_key) VALUES (?);"
+	query := `INSERT INTO db_wesley_chan.tb_file (file_id) VALUES (?);`
 
-	_, err := f.cli.ExecContext(ctx, query, file.Key)
+	_, err := f.cli.ExecContext(ctx, query, file.ID)
 	if err != nil {
 		return err
 	}

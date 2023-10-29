@@ -7,11 +7,15 @@ import (
 )
 
 type Service struct {
-	File *FileService
+	Comment *CommentService
+	File    *FileService
+	Thread  *ThreadService
 }
 
 func New(cfg *config.Config, logger *zerolog.Logger, repo *repo.RepoManager) *Service {
 	return &Service{
-		File: NewFileService(cfg, logger, repo),
+		Comment: NewCommentService(cfg, logger, repo),
+		File:    NewFileService(cfg, logger, repo),
+		Thread:  NewThreadService(cfg, logger, repo),
 	}
 }
