@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -44,7 +43,7 @@ func (s *FileService) UploadFile(ctx context.Context, r *req.File) (resp *res.Fi
 		return nil, err
 	}
 
-	fileID := strings.Join([]string{v4.String(), stringutil.GetFileExt(r.Header.Filename)}, ".")
+	fileID := v4.String() + stringutil.GetFileExt(r.Header.Filename)
 
 	session, err := session.NewSession(&aws.Config{
 		Region: aws.String(s.Config.AWSConfig.Region),
@@ -66,16 +65,17 @@ func (s *FileService) UploadFile(ctx context.Context, r *req.File) (resp *res.Fi
 		return nil, err
 	}
 
-	err = s.RepoManager.MySQL.File.InsertFile(ctx, &model.File{
-		ID: fileID,
-	})
+	file := &model.File{
+		ID:               fileID,
+		OriginalFileName: stringutil.GetFileName(r.Header.Filename),
+	}
 
-	if err != nil {
+	if err := s.RepoManager.MySQL.File.InsertFile(ctx, file); err != nil {
 		return nil, err
 	}
 
 	return &res.File{
-		ID:  fileID,
-		URL: stringutil.GetFileURL(s.Config, fileID),
+		ID:  file.ID,
+		URL: stringutil.GetFileURL(s.Config, file),
 	}, nil
 }

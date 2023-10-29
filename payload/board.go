@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"regexp"
 
 	"github.com/savi2w/wesley-chan/presenter/req"
 )
@@ -45,4 +46,21 @@ func GetBoard(rc io.ReadCloser) (r *req.Board, err error) {
 	}
 
 	return r, nil
+}
+
+func GetSlug(slug string) (string, error) {
+	if len(slug) <= 0 {
+		return "", errors.New("you cannot send an empty slug, please type something")
+	}
+
+	if len(slug) > 16 {
+		return "", errors.New("slug too long, please keep it at under 16 characters")
+	}
+
+	// Check if slug has any non-alphanumeric characters using RegExp
+	if !regexp.MustCompile(`^[a-zA-Z0-9]+$`).MatchString(slug) {
+		return "", errors.New("slug can only contain alphanumeric characters")
+	}
+
+	return slug, nil
 }

@@ -8,12 +8,13 @@ import (
 )
 
 func Register(cfg *config.Config, svr *echo.Echo, ctrl *controller.Controller) {
-	root := svr.Group("wc")
+	root := svr.Group("")
 	root.GET("/health", ctrl.HealthController.HealthCheck)
 
 	board := root.Group("/board")
 	board.POST("", ctrl.BoardController.HandleNewBoard, middleware.RequireAdminKey(cfg))
 	board.GET("", ctrl.BoardController.HandleGetAll)
+	board.GET("/:slug", ctrl.ThreadController.HandleGetThreadsByBoardSlug)
 
 	comment := root.Group("/comment")
 	comment.POST("", ctrl.CommentController.HandleNewComment)
