@@ -44,7 +44,7 @@ func (s *Server) Start() error {
 	s.svr.HidePort = true
 
 	middleware.SetMiddlewares(s.svr, s.cfg)
-	router.Register(s.svr, s.ctrl)
+	router.Register(s.cfg, s.svr, s.ctrl)
 
 	s.logger.Info().Msg("starting server")
 
