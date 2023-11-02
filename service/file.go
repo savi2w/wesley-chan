@@ -76,6 +76,6 @@ func (s *FileService) UploadFile(ctx context.Context, r *req.File) (resp *res.Fi
 
 	return &res.File{
 		ID:  file.ID,
-		URL: stringutil.GetFileURL(s.Config, file),
+		URL: stringutil.GetFileURL(s.Config, file.ID),
 	}, nil
 }

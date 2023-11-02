@@ -5,6 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog"
+	"github.com/savi2w/wesley-chan/consts"
 	"github.com/savi2w/wesley-chan/errors"
 	"github.com/savi2w/wesley-chan/payload"
 	"github.com/savi2w/wesley-chan/service"
@@ -35,4 +36,25 @@ func (ctrl *Controller) HandleNewComment(ctx echo.Context) error {
 	}
 
 	return ctx.JSON(http.StatusCreated, nil)
+}
+
+func (ctrl *Controller) HandleSelectCommentsByThreadID(ctx echo.Context) error {
+	thrID, err := payload.GetThreadID(ctx.Param("thread_id"))
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, errors.Wrap(err))
+	}
+
+	offset, err := payload.GetOffsetByPage(ctx.QueryParam("page"), consts.CommentItemsPerPage)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, errors.Wrap(err))
+	}
+
+	resp, err := ctrl.svc.Comment.SelectByThreadID(ctx.Request().Context(), thrID, offset)
+	if err != nil {
+		ctrl.logger.Err(err).Msg(err.Error())
+
+		return ctx.JSON(http.StatusInternalServerError, nil)
+	}
+
+	return ctx.JSON(http.StatusOK, resp)
 }

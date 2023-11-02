@@ -8,7 +8,6 @@ import (
 
 	"github.com/savi2w/wesley-chan/config"
 	"github.com/savi2w/wesley-chan/consts"
-	"github.com/savi2w/wesley-chan/model"
 )
 
 func GetFileName(fileName string) string {
@@ -32,6 +31,7 @@ func GetFileExt(fileName string) string {
 	return ext
 }
 
-func GetFileURL(cfg *config.Config, file *model.File) string {
-	return "https://" + cfg.AWSConfig.FileBucketName + ".s3.amazonaws.com/" + url.PathEscape(file.ID) + "#" + url.PathEscape(file.OriginalFileName)
+// TODO: Make a way to add the original file name without querying the database
+func GetFileURL(cfg *config.Config, fileID string) string {
+	return "https://" + cfg.AWSConfig.FileBucketName + ".s3.amazonaws.com/" + url.PathEscape(fileID)
 }

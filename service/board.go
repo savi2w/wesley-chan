@@ -35,8 +35,8 @@ func (s *BoardService) NewBoard(ctx context.Context, r *req.Board) error {
 	return s.RepoManager.MySQL.Board.InsertBoard(ctx, board)
 }
 
-func (s *BoardService) GetAll(ctx context.Context) (resp []res.Board, err error) {
-	boards, err := s.RepoManager.MySQL.Board.SelectAll(ctx)
+func (s *BoardService) Select(ctx context.Context) (resp []res.Board, err error) {
+	boards, err := s.RepoManager.MySQL.Board.Select(ctx)
 	if err != nil {
 		return nil, err
 	}

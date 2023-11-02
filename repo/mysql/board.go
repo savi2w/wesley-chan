@@ -22,7 +22,7 @@ func (b *Board) InsertBoard(ctx context.Context, board *model.Board) error {
 	return nil
 }
 
-func (b *Board) SelectAll(ctx context.Context) (result []model.Board, err error) {
+func (b *Board) Select(ctx context.Context) (result []model.Board, err error) {
 	query := `
 		SELECT board_id, name, slug, description, created_at, updated_at, deleted_at 
 		FROM db_wesley_chan.tb_board

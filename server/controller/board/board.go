@@ -37,8 +37,8 @@ func (ctrl *Controller) HandleNewBoard(ctx echo.Context) error {
 	return ctx.JSON(http.StatusCreated, nil)
 }
 
-func (ctrl *Controller) HandleGetAll(ctx echo.Context) error {
-	resp, err := ctrl.svc.Board.GetAll(ctx.Request().Context())
+func (ctrl *Controller) HandleSelect(ctx echo.Context) error {
+	resp, err := ctrl.svc.Board.Select(ctx.Request().Context())
 	if err != nil {
 		ctrl.logger.Err(err).Msg(err.Error())
 

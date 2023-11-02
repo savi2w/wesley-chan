@@ -5,7 +5,7 @@ import "time"
 type Thread struct {
 	ID          string     `json:"threadId"`
 	BoardID     string     `json:"boardId"`
-	FileID      *string    `json:"fileId"`
+	File        *File      `json:"file"`
 	Subject     string     `json:"subject"`
 	TextContent string     `json:"textContent"`
 	CreatedAt   time.Time  `json:"createdAt"`

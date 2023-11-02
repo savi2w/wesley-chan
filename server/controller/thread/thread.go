@@ -38,8 +38,8 @@ func (ctrl *Controller) HandleNewThread(ctx echo.Context) error {
 	return ctx.JSON(http.StatusCreated, nil)
 }
 
-func (ctrl *Controller) HandleGetThreadsByBoardSlug(ctx echo.Context) error {
-	slug, err := payload.GetSlug(ctx.Param("slug"))
+func (ctrl *Controller) HandleSelectThreadsByBoardSlug(ctx echo.Context) error {
+	slug, err := payload.GetSlug(ctx.Param("board_slug"))
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, errors.Wrap(err))
 	}
@@ -49,7 +49,7 @@ func (ctrl *Controller) HandleGetThreadsByBoardSlug(ctx echo.Context) error {
 		return ctx.JSON(http.StatusBadRequest, errors.Wrap(err))
 	}
 
-	resp, err := ctrl.svc.Thread.GetThreadsByBoardSlug(ctx.Request().Context(), slug, offset)
+	resp, err := ctrl.svc.Thread.SelectByBoardSlug(ctx.Request().Context(), slug, offset)
 	if err != nil {
 		ctrl.logger.Err(err).Msg(err.Error())
 

@@ -50,3 +50,11 @@ func GetThread(rc io.ReadCloser) (r *req.Thread, err error) {
 
 	return r, nil
 }
+
+func GetThreadID(thrID string) (string, error) {
+	if len(thrID) != 36 {
+		return "", errors.New("invalid thread uuid")
+	}
+
+	return thrID, nil
+}
