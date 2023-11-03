@@ -27,7 +27,7 @@ func (c *Comment) InsertComment(ctx context.Context, cmt *model.Comment) error {
 		return err
 	}
 
-	thread := `UPDATE db_wesley_chan.tb_thread SET updated_at = NOW() WHERE id = ?;`
+	thread := `UPDATE db_wesley_chan.tb_thread SET updated_at = NOW() WHERE thread_id = ?;`
 
 	_, err = tx.ExecContext(ctx, thread, cmt.ThreadID)
 	if err != nil {
