@@ -11,6 +11,7 @@ import (
 	"github.com/savi2w/wesley-chan/server"
 	"github.com/savi2w/wesley-chan/server/controller"
 	"github.com/savi2w/wesley-chan/service"
+	"github.com/savi2w/wesley-chan/util/resutil"
 )
 
 func main() {
@@ -23,7 +24,7 @@ func main() {
 	}
 
 	svc := service.New(cfg, logger, repo)
-	ctrl := controller.New(svc, logger)
+	ctrl := controller.New(svc, resutil.New(logger), logger)
 
 	if err := server.New(cfg, logger, ctrl).Start(); err != nil {
 		end(err, "failed to start server")

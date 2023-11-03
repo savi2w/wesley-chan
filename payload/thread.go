@@ -16,7 +16,7 @@ func GetThread(rc io.ReadCloser) (r *req.Thread, err error) {
 		return nil, errors.New("invalid read closer")
 	}
 
-	if err := json.Unmarshal(body, r); err != nil {
+	if err := json.Unmarshal(body, &r); err != nil {
 		return nil, errors.New("invalid json payload")
 	}
 

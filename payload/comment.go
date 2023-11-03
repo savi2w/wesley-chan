@@ -16,7 +16,7 @@ func GetComment(rc io.ReadCloser) (r *req.Comment, err error) {
 		return nil, errors.New("invalid read closer")
 	}
 
-	if err := json.Unmarshal(body, r); err != nil {
+	if err := json.Unmarshal(body, &r); err != nil {
 		return nil, errors.New("invalid json payload")
 	}
 

@@ -43,6 +43,7 @@ func (s *BoardService) Select(ctx context.Context) (resp []res.Board, err error)
 
 	for _, board := range boards {
 		resp = append(resp, res.Board{
+			ID:          board.ID,
 			Name:        board.Name,
 			Slug:        board.Slug,
 			Description: board.Description,

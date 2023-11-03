@@ -8,6 +8,7 @@ import (
 	"github.com/savi2w/wesley-chan/server/controller/health"
 	"github.com/savi2w/wesley-chan/server/controller/thread"
 	"github.com/savi2w/wesley-chan/service"
+	"github.com/savi2w/wesley-chan/util/resutil"
 )
 
 type Controller struct {
@@ -18,12 +19,12 @@ type Controller struct {
 	ThreadController  *thread.Controller
 }
 
-func New(svc *service.Service, log *zerolog.Logger) *Controller {
+func New(svc *service.Service, resutil *resutil.ResUtil, log *zerolog.Logger) *Controller {
 	return &Controller{
-		BoardController:   board.New(log, svc),
-		CommentController: comment.New(log, svc),
-		FileController:    file.New(log, svc),
+		BoardController:   board.New(log, resutil, svc),
+		CommentController: comment.New(log, resutil, svc),
+		FileController:    file.New(log, resutil, svc),
 		HealthController:  health.New(),
-		ThreadController:  thread.New(log, svc),
+		ThreadController:  thread.New(log, resutil, svc),
 	}
 }
