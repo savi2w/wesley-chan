@@ -9,7 +9,7 @@ import (
 
 func Register(cfg *config.Config, svr *echo.Echo, ctrl *controller.Controller) {
 	root := svr.Group("", middleware.RequireClientKey(cfg))
-	svr.GET("/health", ctrl.HealthController.HealthCheck)
+	root.GET("/health", ctrl.HealthController.HealthCheck)
 
 	file := root.Group("/file")
 	file.POST("/upload", ctrl.FileController.HandleUpload)

@@ -36,8 +36,8 @@ func Get() *Config {
 
 	return &Config{
 		AWSConfig: &AWSConfig{
-			FileBucketName: viper.GetString("AWS_FILE_BUCKET_NAME"),
-			Region:         viper.GetString("AWS_REGION"),
+			FileBucketName: viper.GetString("AWS_CONFIG_FILE_BUCKET_NAME"),
+			Region:         viper.GetString("AWS_CONFIG_REGION"),
 		},
 		InternalConfig: &InternalConfig{
 			AdminKey:     viper.GetString("ADMIN_KEY"),
