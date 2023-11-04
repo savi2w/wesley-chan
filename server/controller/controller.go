@@ -19,12 +19,14 @@ type Controller struct {
 	ThreadController  *thread.Controller
 }
 
-func New(svc *service.Service, resutil *resutil.ResUtil, log *zerolog.Logger) *Controller {
+func New(svc *service.Service, logger *zerolog.Logger) *Controller {
+	resutil := resutil.New(logger)
+
 	return &Controller{
-		BoardController:   board.New(log, resutil, svc),
-		CommentController: comment.New(log, resutil, svc),
-		FileController:    file.New(log, resutil, svc),
+		BoardController:   board.New(logger, resutil, svc),
+		CommentController: comment.New(logger, resutil, svc),
+		FileController:    file.New(logger, resutil, svc),
 		HealthController:  health.New(),
-		ThreadController:  thread.New(log, resutil, svc),
+		ThreadController:  thread.New(logger, resutil, svc),
 	}
 }

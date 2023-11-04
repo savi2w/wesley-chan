@@ -1,9 +1,12 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"sync"
 
+	"github.com/aws/aws-lambda-go/events"
+	echoadapter "github.com/awslabs/aws-lambda-go-api-proxy/echo"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog"
 	"github.com/savi2w/wesley-chan/config"
@@ -19,7 +22,7 @@ var (
 
 type Server struct {
 	cfg    *config.Config
-	svr    *echo.Echo
+	svr    *echoadapter.EchoLambda
 	logger *zerolog.Logger
 	ctrl   *controller.Controller
 }
@@ -28,9 +31,15 @@ func New(cfg *config.Config, logger *zerolog.Logger, ctrl *controller.Controller
 	once.Do(func() {
 		svr := echo.New()
 
+		svr.HideBanner = true
+		svr.HidePort = true
+
+		middleware.SetMiddlewares(svr, cfg)
+		router.Register(cfg, svr, ctrl)
+
 		instance = &Server{
 			cfg:    cfg,
-			svr:    svr,
+			svr:    echoadapter.New(svr),
 			logger: logger,
 			ctrl:   ctrl,
 		}
@@ -40,17 +49,15 @@ func New(cfg *config.Config, logger *zerolog.Logger, ctrl *controller.Controller
 }
 
 func (s *Server) Start() error {
-	s.svr.HideBanner = true
-	s.svr.HidePort = true
-
-	middleware.SetMiddlewares(s.svr, s.cfg)
-	router.Register(s.cfg, s.svr, s.ctrl)
-
 	s.logger.Info().Msg("starting server")
 
-	if err := s.svr.Start(fmt.Sprintf(":%d", s.cfg.InternalConfig.ServerPort)); err != nil {
+	if err := s.svr.Echo.Start(fmt.Sprintf(":%d", s.cfg.InternalConfig.ServerPort)); err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func (s *Server) Handler(ctx context.Context, req events.APIGatewayProxyRequest) (res events.APIGatewayProxyResponse, err error) {
+	return s.svr.ProxyWithContext(ctx, req)
 }

@@ -20,8 +20,8 @@ func GetComment(rc io.ReadCloser) (r *req.Comment, err error) {
 		return nil, errors.New("invalid json payload")
 	}
 
-	if len(r.ThreadID) != 36 {
-		return nil, errors.New("invalid thread uuid")
+	if _, err := GetThreadID(r.ThreadID); err != nil {
+		return nil, err
 	}
 
 	if r.FileID != nil {
