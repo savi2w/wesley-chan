@@ -5,6 +5,7 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/savi2w/wesley-chan/config"
+	"github.com/savi2w/wesley-chan/mapper"
 	"github.com/savi2w/wesley-chan/model"
 	"github.com/savi2w/wesley-chan/presenter/req"
 	"github.com/savi2w/wesley-chan/presenter/res"
@@ -41,17 +42,5 @@ func (s *BoardService) Select(ctx context.Context) (resp []res.Board, err error)
 		return nil, err
 	}
 
-	for _, board := range boards {
-		resp = append(resp, res.Board{
-			ID:          board.ID,
-			Name:        board.Name,
-			Slug:        board.Slug,
-			Description: board.Description,
-			CreatedAt:   board.CreatedAt,
-			UpdatedAt:   board.UpdatedAt,
-			DeletedAt:   board.DeletedAt,
-		})
-	}
-
-	return resp, nil
+	return mapper.BoardModelToRes(boards), nil
 }
