@@ -1,6 +1,6 @@
 # Wesley-chan
 
-Work in progress ⚠️
+A simple imageboard back-end written as a weekend project for fun
 
 ## License
 
